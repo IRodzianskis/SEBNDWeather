@@ -14,6 +14,10 @@ namespace SEBNDWeather
     {
         static void Main(string[] args)
         {
+            UserPrompt();
+        }
+        public static void UserPrompt()
+        {
             Console.WriteLine("Hello User, would you like to input data or output data?");
             Console.WriteLine("1. Input Data");
             Console.WriteLine("2. Output Data");
