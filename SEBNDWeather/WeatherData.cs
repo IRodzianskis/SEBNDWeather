@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SEBNDWeather
 {
-    class WeatherData
+    public class WeatherData
     {
         public string NameOfCity { get; set; }
-        public float Temerature { get; set; }
-        public DateTime DateOfRecord { get; set; }
+        public double Temperature { get; set; }
+        public string DateOfRecord { get; set; }
         public bool WasPrecipitation { get; set; }
-        public float WindSpeed { get; set; }
-        public List<string> WindDirection { get; set; }
+        public double WindSpeed { get; set; }
+        public string WindDirection { get; set; }
     }
 }
