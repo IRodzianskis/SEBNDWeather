@@ -4,39 +4,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace SEBNDWeather
 {
     public static class DataInputClass
     {
-        public static List<WeatherData> InputInit()
+        public static List<WeatherData> InputInit(List<WeatherData> WholeData)
         {
-            List<WeatherData> WholeData = DataInput();
+            WholeData = DataInput(WholeData);
+            Console.Write("Would you like to input more data [Yes/No]? ");
+            if (Console.ReadLine().ToLower() == "yes")
+                DataInput(WholeData);
             return WholeData;
         }
-        private static List<WeatherData> DataInput()
+        private static List<WeatherData> DataInput(List<WeatherData> WholeData)
         {
-            string City, Direction = "", DateOfRecord = "", PrecipitationCheck = "", Temperature = "", WindSpeed = "";
+            string City = "", Direction = "", DateOfRecord = "", PrecipitationCheck = "", Temperature = "", WindSpeed = "";
             double TemperatureCorrect, WindSpeedCorrect;
             bool WasPrecipitation;
 
             Console.WriteLine("========== DATA INPUT ==========");
-            Console.Write("Please input the name of the city: ");
-            City = Console.ReadLine();
+            while (!Regex.IsMatch(City, "^[a-zA-Z]+$"))
+            {
+                Console.Write("Please input the name of the city: ");
+                City = Console.ReadLine().Trim();
+            }
             while (!double.TryParse(Temperature, out TemperatureCorrect))
             {
                 Console.Write("\nPlease input the temperature in Celsius: ");
-                Temperature = Console.ReadLine();
+                Temperature = Console.ReadLine().Trim();
             }
             while (!DateValidation(DateOfRecord))
             {
                 Console.Write("\nPlease input the date of recording [Format: yyyy/MM/dd]: ");
-                DateOfRecord = Console.ReadLine();
+                DateOfRecord = Console.ReadLine().Trim();
             }
             while (PrecipitationCheck.ToLower() != "yes" && PrecipitationCheck.ToLower() != "no")
             {
                 Console.Write("\nPlease input whether there was precipitation of not [Yes/No]: ");
-                PrecipitationCheck = Console.ReadLine();
+                PrecipitationCheck = Console.ReadLine().Trim();
             }
             if (PrecipitationCheck == "Yes")
                 WasPrecipitation = true;
@@ -44,15 +51,13 @@ namespace SEBNDWeather
             while (!double.TryParse(WindSpeed, out WindSpeedCorrect))
             {
                 Console.Write("\nPlease input the wind speed [m/s]: ");
-                WindSpeed = Console.ReadLine();
+                WindSpeed = Console.ReadLine().Trim();
             }
             while (!DirectionValidation(Direction))
             {
                 Console.Write("\nPlease input the direction of wind [Whole or abbreviated directional words (NE, East, eAst etc.)]: ");
-                Direction = Console.ReadLine();
+                Direction = Console.ReadLine().Trim();
             }
-            //Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}", City, TemperatureCorrect, DateOfRecord, WasPrecipitation, WindSpeed, Direction);
-            var WholeData = new List<WeatherData>();
             WholeData.Add(new WeatherData
             {
                 NameOfCity = City,
@@ -62,21 +67,12 @@ namespace SEBNDWeather
                 WindSpeed = WindSpeedCorrect,
                 WindDirection = Direction
             });
-            //foreach (WeatherData item in WholeData)
-            //{
-            //    Console.WriteLine(item.NameOfCity);
-            //    Console.WriteLine(item.Temperature);
-            //    Console.WriteLine(item.DateOfRecord);
-            //    Console.WriteLine(item.WasPrecipitation);
-            //    Console.WriteLine(item.WindSpeed);
-            //    Console.WriteLine(item.WindDirection);
-            //}
             return WholeData;
-
         }
         private static bool DateValidation(string date)
         {
-            if (DateTime.TryParseExact(date, "yyyy/MM/dd", null, DateTimeStyles.None, out DateTime Test) == true)
+            DateTime Test;
+            if (DateTime.TryParseExact(date, "yyyy/MM/dd", null, DateTimeStyles.None, out Test) && (Test <= DateTime.Now))
                 return true;
             else
                 return false;
@@ -89,5 +85,6 @@ namespace SEBNDWeather
                 return true;
             else return false;
         }
+
     }
 }
