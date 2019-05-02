@@ -9,32 +9,22 @@ namespace SEBNDWeather
 {
     public static class DataOutputClass
     {
-        public static void OutputInit(List<WeatherData> WholeData)
-        {
-            DataOutput(WholeData);
-        }
-        private static void DataOutput(List<WeatherData> WholeData)
+        public static void DataOutput(List<WeatherData> WholeData)
         {
             Console.WriteLine("\n========== DATA OUTPUT ==========");
             Console.WriteLine("Hello User, plase enter your search criteria [Name of City/Date of recording]");
             Console.Write("Criteria: ");
-            string Selection = Console.ReadLine();
+            string Selection = Console.ReadLine().Trim();
             Console.Write("\n");
-            bool isDate = InputCheck(Selection);
             int i = 1;
+            bool isDate = InputCheck(Selection);
             if (isDate)
             {
                 foreach (WeatherData item in WholeData)
                 {
                     if (item.DateOfRecord.Contains(Selection))
                     {
-                        Console.WriteLine("\n=================ITEM {0}=================",i);
-                        Console.WriteLine("Name of city: " + item.NameOfCity);
-                        Console.WriteLine("Recorded temperature: " + item.Temperature);
-                        Console.WriteLine("Date of recording: " + item.DateOfRecord);
-                        Console.WriteLine("Was there precipitation: " + item.WasPrecipitation);
-                        Console.WriteLine("Wind Speed: " + item.WindSpeed + " m/s");
-                        Console.WriteLine("Wind direction: " + item.WindDirection);
+                        DataPrinter(item, Selection, i);
                         i++;
                     }
                 }
@@ -47,13 +37,7 @@ namespace SEBNDWeather
                 {
                     if (item.NameOfCity.Contains(Selection))
                     {
-                        Console.WriteLine("\n=================ITEM {0}=================", i);
-                        Console.WriteLine("Name of city: " + item.NameOfCity);
-                        Console.WriteLine("Recorded temperature: " + item.Temperature);
-                        Console.WriteLine("Date of recording: " + item.DateOfRecord);
-                        Console.WriteLine("Was there precipitation: " + item.WasPrecipitation);
-                        Console.WriteLine("Wind Speed: " + item.WindSpeed + " m/s");
-                        Console.WriteLine("Wind direction: " + item.WindDirection);
+                        DataPrinter(item, Selection, i);
                         i++;
                     }
                 }
@@ -66,14 +50,23 @@ namespace SEBNDWeather
         {
             if (DateTime.TryParseExact(input, "yyyy/MM/dd", null, DateTimeStyles.None, out DateTime Test) == true)
             {
-                Console.WriteLine("Date");
                 return true;
             }
             else
             {
-                Console.WriteLine("Not Date");
                 return false;
             }
+        }
+        private static void DataPrinter(WeatherData item, string Selection, int i)
+        {
+                Console.WriteLine("\n=================ITEM {0}=================", i);
+                Console.WriteLine("Name of city: " + item.NameOfCity);
+                Console.WriteLine("Recorded temperature: " + item.Temperature);
+                Console.WriteLine("Date of recording: " + item.DateOfRecord);
+                Console.WriteLine("Was there precipitation: " + item.WasPrecipitation);
+                Console.WriteLine("Wind Speed: " + item.WindSpeed + " m/s");
+                Console.WriteLine("Wind direction: " + item.WindDirection);
+                i++;
         }
     }
 }

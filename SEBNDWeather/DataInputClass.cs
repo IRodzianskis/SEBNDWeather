@@ -14,8 +14,8 @@ namespace SEBNDWeather
         {
             WholeData = DataInput(WholeData);
             Console.Write("Would you like to input more data [Yes/No]? ");
-            if (Console.ReadLine().ToLower() == "yes")
-                DataInput(WholeData);
+            if (Console.ReadLine().ToLower().Trim() == "yes")
+                InputInit(WholeData);
             return WholeData;
         }
         private static List<WeatherData> DataInput(List<WeatherData> WholeData)
@@ -25,7 +25,7 @@ namespace SEBNDWeather
             bool WasPrecipitation;
 
             Console.WriteLine("========== DATA INPUT ==========");
-            while (!Regex.IsMatch(City, "^[a-zA-Z]+$"))
+            while (!Regex.IsMatch(City, "^[a-zA-Z ]+$"))
             {
                 Console.Write("Please input the name of the city: ");
                 City = Console.ReadLine().Trim();
@@ -56,7 +56,7 @@ namespace SEBNDWeather
             while (!DirectionValidation(Direction))
             {
                 Console.Write("\nPlease input the direction of wind [Whole or abbreviated directional words (NE, East, eAst etc.)]: ");
-                Direction = Console.ReadLine().Trim();
+                Direction = Console.ReadLine().Trim().ToUpper();
             }
             WholeData.Add(new WeatherData
             {
@@ -71,8 +71,7 @@ namespace SEBNDWeather
         }
         private static bool DateValidation(string date)
         {
-            DateTime Test;
-            if (DateTime.TryParseExact(date, "yyyy/MM/dd", null, DateTimeStyles.None, out Test) && (Test <= DateTime.Now))
+            if (DateTime.TryParseExact(date, "yyyy/MM/dd", null, DateTimeStyles.None, out DateTime Test) && (Test <= DateTime.Now))
                 return true;
             else
                 return false;
